@@ -6,13 +6,27 @@
 # and do whatever for each file
 ###############################################
 
-WORK_DIR="files"
+multiFile() {
+for FILE in $(ls $WORK_DIR/$PATTERN )
+		do
+		    singleFile $FILE
+		done
+}
 
-if [ $# = 0 ];
-then
-    echo "usage" $0 "--file-pattern=<pattern> --mode=<single|multipe>"
+singleFile(){
+    echo "executing for $1"
+}
+
+usage(){
+    echo "usage processXml.sh --file-pattern=<pattern> --mode=<single|multiple>"
+    echo "                    --input-file=<inputFile>"
     exit 1
+}
+if [ $# = 0 ]; then
+    usage
 fi
+
+WORK_DIR="files"
 
 for i in "$@"
 do
@@ -32,6 +46,21 @@ case $i in
 esac
 done
 
-echo $INPUT_FILE
-echo $MODE
-echo $PATTERN
+#echo "INPUT_FILE:$INPUT_FILE"
+#echo "MODE:$MODE"
+#echo "PATTERN:$PATTERN"
+
+if [[ $INPUT_FILE != "" ]]; then
+    singleFile $INPUT_FILE
+elif [[ $PATTERN != "" ]]; then
+    if [[ $MODE = "multiple" ]]; then
+        multiFile
+    elif [[ $MODE = "single" ]]; then
+        LAST_FILE=$(ls -lt $WORK_DIR/$PATTERN | awk '/.*/ { f=$NF };END{ print f }')
+        singleFile $LAST_FILE
+    else
+        usage
+    fi
+else
+    usage
+fi
