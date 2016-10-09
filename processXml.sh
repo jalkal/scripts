@@ -2,7 +2,7 @@
 
 ##############################################
 # Author: Jose Alcalde
-# Descriptrion: script that give a file name pattern is able find those files with this pattern
+# Descriptrion: script that given a file name pattern is able find those files with this pattern
 # and do whatever for each file
 ###############################################
 
